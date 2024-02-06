@@ -13,17 +13,17 @@ export class RegisterUserDto {
         public img?: string,
     ) { }
 
-    static RegisterUser(object: { [key: string]: any }): [string?, RegisterUserDto?] {
+    static RegisterUser(object: { [key: string]: any }): [string[], RegisterUserDto?] {
         const { name, email, password, role, img } = object
         try {
             authSchema.parse({ name, email, password, role, img });
             return [
-                undefined,
+                [],
                 new RegisterUserDto(name, email, password, role, img)
             ];
         } catch (error) {
             if (error instanceof ZodError) {
-                return [error.errors[0].message, undefined]
+                return [error.errors.map(issues => issues.message), undefined]
             }
             throw CustomError.internal();
         }

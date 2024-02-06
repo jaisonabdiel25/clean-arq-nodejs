@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { RegisterUserDto } from '../../domain/dtos/auth/registerUser.dto';
-import { AuthService, CustomError } from "../../domain";
+import { AuthService, CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 import { jwtAdapter } from "../../config";
 import { UserDB } from "../../data/mongoose";
+
 
 export class AuthController {
 
@@ -19,11 +19,10 @@ export class AuthController {
     }
 
     registerUser = async (req: Request, res: Response) => {
-
         try {
             const [error, registerUserDto] = await RegisterUserDto.RegisterUser(req.body)
 
-            if (error) return res.status(412).send({ error });
+            if (error.length > 0) return res.status(412).send({ error });
 
             const result = await this._authServives.register(registerUserDto!)
 
@@ -31,11 +30,21 @@ export class AuthController {
         } catch (error) {
             this.handleErrors(error, res)
         }
-
     }
 
-    loginUser = (req: Request, res: Response) => {
-        res.send(req.body)
+    loginUser = async (req: Request, res: Response) => {
+        try {
+            const [error, loginUserDto] = await LoginUserDto.loginUser(req.body);
+
+            if (error.length > 0) return res.status(412).send({ error });
+
+            const result = await this._authServives.login(loginUserDto!);
+            res.json({ result, token: await jwtAdapter.generateToken({ id: result.id }) });
+        } catch (error) {
+            this.handleErrors(error, res)
+        }
+
+
     }
 
     getUsers = async (req: Request, res: Response) => {

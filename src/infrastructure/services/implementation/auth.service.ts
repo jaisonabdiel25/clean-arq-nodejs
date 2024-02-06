@@ -1,4 +1,4 @@
-import { AuthRepositories, AuthService, RegisterUserDto, UserEntity } from "../../../domain";
+import { AuthRepositories, AuthService, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 
 
 export class AuthServiceImpl implements AuthService{
@@ -11,6 +11,10 @@ export class AuthServiceImpl implements AuthService{
 
     register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
         return this._authRepositories.register(registerUserDto); 
+    }
+
+    login(loginUserDto: LoginUserDto): Promise<UserEntity> {
+        return this._authRepositories.login(loginUserDto); 
     }
 
 }
