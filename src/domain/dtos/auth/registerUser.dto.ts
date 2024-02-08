@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 
-import { authSchema } from "../../validations/auth.schema";
+import { authSchema } from "../../validations/auth/auth.schema";
 import { CustomError } from "../../errors/custom.errors";
 
 

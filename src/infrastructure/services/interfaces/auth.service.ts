@@ -2,7 +2,7 @@ import { LoginUserDto, RegisterUserDto } from '../../../domain';
 import { UserEntity } from '../../../domain/entities/user.entity';
 
 
-export abstract class AuthService {
+export abstract class IAuthService {
     abstract register(registerUserDto: RegisterUserDto): Promise<UserEntity>;
     abstract login(loginUserDto: LoginUserDto): Promise<UserEntity>;
 }

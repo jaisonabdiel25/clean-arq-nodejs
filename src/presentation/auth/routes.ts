@@ -12,11 +12,11 @@ export class AuthRoutes {
 
         const controller = new AuthController(authRepository);
 
-
         // definir las rutas
         router.post('/login', controller.loginUser);
         router.post('/register', controller.registerUser);
         router.get('/', [TokenMiddelware.verifyToken], controller.getUsers);
+        router.post('/token', controller.generateToken);
 
         return router;
     }

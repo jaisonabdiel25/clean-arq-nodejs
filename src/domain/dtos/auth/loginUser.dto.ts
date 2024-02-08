@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { loginSchema } from "../../validations/login.schema";
+import { loginSchema } from "../../validations/auth/login.schema";
 
 
 export class LoginUserDto {

@@ -1,7 +1,7 @@
-import { AuthRepositories, AuthService, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
+import { AuthRepositories, IAuthService, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 
 
-export class AuthServiceImpl implements AuthService{
+export class AuthServiceImpl implements IAuthService{
 
     constructor(
         private readonly _authRepositories: AuthRepositories

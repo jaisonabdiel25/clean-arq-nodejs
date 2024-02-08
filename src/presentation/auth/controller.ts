@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { AuthService, CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
+import { IAuthService, CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 import { jwtAdapter } from "../../config";
 import { UserDB } from "../../data/mongoose";
 
@@ -7,7 +7,7 @@ import { UserDB } from "../../data/mongoose";
 export class AuthController {
 
     constructor(
-        private readonly _authServives: AuthService
+        private readonly _authServives: IAuthService
     ) {
 
     }
@@ -45,6 +45,15 @@ export class AuthController {
         }
 
 
+    }
+
+    generateToken = async (req: Request, res: Response) => {
+        try {
+
+            res.json({ token: await jwtAdapter.generateToken({}) })
+        } catch (error) {
+            this.handleErrors(error, res)
+        }
     }
 
     getUsers = async (req: Request, res: Response) => {
