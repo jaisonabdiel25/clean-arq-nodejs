@@ -43,8 +43,6 @@ export class AuthController {
         } catch (error) {
             this.handleErrors(error, res)
         }
-
-
     }
 
     generateToken = async (req: Request, res: Response) => {

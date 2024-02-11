@@ -7,6 +7,8 @@ export class UserEntity {
         public name: string,
         public email: string,
         public password: string,
+        public status: boolean,
+        public phone?: string,
         public roles?: string[],
         public img?: string,
     ) { }

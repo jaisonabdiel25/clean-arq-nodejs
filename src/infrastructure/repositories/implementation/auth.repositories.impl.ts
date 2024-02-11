@@ -1,7 +1,7 @@
 import { BcryptAdapter } from "../../../config";
-import { UserDB } from "../../../data/mongoose";
 import { AuthRepositories, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 import { UserMapper } from "../../mappers/User.mapper";
+import { prisma } from "../../../data/postgress";
 
 
 
@@ -9,18 +9,36 @@ import { UserMapper } from "../../mappers/User.mapper";
 export class AuthRepositoriesImpl implements AuthRepositories {
     async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
 
-        const { name, email, password, img } = registerUserDto;
+        const { name, email, password, img, phone } = registerUserDto;
         try {
 
             //validate email
-            const exists = await UserDB.findOne({ email });
-            if (exists) throw CustomError.prevalidation('email already exists');
+            const existPostgres = await prisma.user.findMany({ where: { email } })
 
-            //create user
-            const user = new UserDB({ name, email, img, password: BcryptAdapter.hash(password) });
+            if (existPostgres.length > 0) throw CustomError.prevalidation('email already exists');
+
+            const userRole = await prisma.role.findFirst({ where: { name: 'MODERATOR' } });
+
+            if (!userRole) {
+                throw CustomError.internal('El rol MODERATOR no existe');
+            }
 
             //save user
-            await user.save();
+            const user = await prisma.user.create({
+                data: {
+                    name: name,
+                    email: email,
+                    password: password,
+                    img: img,
+                    phone: phone,
+                    roles: {
+                        create: {
+                            roleId: userRole.id
+                        }
+                    }
+                }
+            });
+
 
             return UserMapper.userEntityFromObject(user);
 
@@ -37,7 +55,7 @@ export class AuthRepositoriesImpl implements AuthRepositories {
         try {
 
             //validate email
-            const user = await UserDB.findOne({ email });
+            const user = await prisma.user.findUnique({ where: { email } })
             if (!user) throw CustomError.prevalidation('email or password incorrect');
 
             //validate password
@@ -52,5 +70,4 @@ export class AuthRepositoriesImpl implements AuthRepositories {
 
         throw CustomError.internal();
     }
-
 }

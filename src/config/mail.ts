@@ -11,7 +11,7 @@ export class MailService {
         }
     })
 
-     async sendEmail(option: SendMailDto): Promise<SentMessageInfo> {
+    async sendEmail(option: SendMailDto): Promise<SentMessageInfo> {
         const { to, subject, html } = option
         try {
 

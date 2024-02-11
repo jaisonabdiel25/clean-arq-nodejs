@@ -9,17 +9,18 @@ export class RegisterUserDto {
         public name: string,
         public email: string,
         public password: string,
-        public role?: string[],
+        public status: boolean,
+        public phone?: string,
         public img?: string,
     ) { }
 
     static RegisterUser(object: { [key: string]: any }): [string[], RegisterUserDto?] {
-        const { name, email, password, role, img } = object
+        const { name, email, password, role, img, phone } = object
         try {
-            authSchema.parse({ name, email, password, role, img });
+            authSchema.parse({ name, email, password, img, phone });
             return [
                 [],
-                new RegisterUserDto(name, email, password, role, img)
+                new RegisterUserDto(name, email, password, img, phone)
             ];
         } catch (error) {
             if (error instanceof ZodError) {
