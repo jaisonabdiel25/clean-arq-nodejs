@@ -1,5 +1,4 @@
-import { LoginUserDto, RegisterUserDto } from '../../../domain';
-import { UserEntity } from '../../../domain/entities/user.entity';
+import { AddRoleDto, LoginUserDto, RegisterUserDto, UserEntity } from '../../../domain';
 
 
 export abstract class IAuthService {

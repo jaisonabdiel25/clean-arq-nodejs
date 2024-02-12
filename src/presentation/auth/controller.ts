@@ -1,7 +1,9 @@
 import { Request, Response } from "express"
-import { IAuthService, CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
+import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 import { jwtAdapter } from "../../config";
 import { UserDB } from "../../data/mongoose";
+import { AddRoleDto } from "../../domain/dtos/auth/addRole.dto";
+import { IAuthService } from "../../infrastructure";
 
 
 export class AuthController {

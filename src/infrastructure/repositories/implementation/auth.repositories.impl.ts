@@ -1,9 +1,8 @@
 import { BcryptAdapter } from "../../../config";
-import { AuthRepositories, CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
+import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 import { UserMapper } from "../../mappers/User.mapper";
 import { prisma } from "../../../data/postgress";
-
-
+import { AuthRepositories } from '../../../infrastructure'
 
 
 export class AuthRepositoriesImpl implements AuthRepositories {
@@ -69,5 +68,21 @@ export class AuthRepositoriesImpl implements AuthRepositories {
         }
 
         throw CustomError.internal();
+    }
+
+    async getUserById(id: string): Promise<UserEntity>{
+
+        try {
+            const user = await prisma.user.findUnique({ where: { id } });
+
+            if (!user) throw CustomError.notFound('User not found');
+
+            return UserMapper.userEntityFromObject(user);
+        } catch (error) {
+            if (error instanceof CustomError) throw error;
+            throw CustomError.internal('Internal server error');
+        }
+
+
     }
 }
