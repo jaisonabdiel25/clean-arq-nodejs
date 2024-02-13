@@ -2,10 +2,10 @@ import { BcryptAdapter } from "../../../config";
 import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 import { UserMapper } from "../../mappers/User.mapper";
 import { prisma } from "../../../data/postgress";
-import { AuthRepositories } from '../../../infrastructure'
+import { IAuthRepositories } from '../../../infrastructure'
 
 
-export class AuthRepositoriesImpl implements AuthRepositories {
+export class AuthRepositoriesImpl implements IAuthRepositories {
     async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
 
         const { name, email, password, img, phone } = registerUserDto;
@@ -82,7 +82,5 @@ export class AuthRepositoriesImpl implements AuthRepositories {
             if (error instanceof CustomError) throw error;
             throw CustomError.internal('Internal server error');
         }
-
-
     }
 }

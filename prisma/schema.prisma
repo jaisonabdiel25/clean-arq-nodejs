@@ -20,6 +20,7 @@ model User {
   phone    String?
   roles    UserRole[]
   active   Boolean  @default(true)
+  accounts Account[]
 }
 
 model Role {
@@ -34,4 +35,17 @@ model UserRole {
   roleId String @db.Uuid 
   user   User @relation(fields: [userId], references: [id])
   role   Role @relation(fields: [roleId], references: [id])
+}
+
+model Account {
+  id       String   @id @default(uuid()) @db.Uuid
+  name     String?
+  description String?
+  amount   Float
+  balance  Float
+  createAt DateTime @default(now())
+  userId   String   @db.Uuid
+  user     User     @relation(fields: [userId], references: [id])
+  updateAt DateTime @updatedAt
+  active   Boolean  @default(true)
 }

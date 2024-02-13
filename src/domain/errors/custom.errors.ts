@@ -1,4 +1,4 @@
-
+import { Response } from 'express';
 
 export class CustomError extends Error {
 
@@ -35,5 +35,11 @@ export class CustomError extends Error {
 
     static internal(message: string = 'internal server error') {
         return new CustomError(message, 500);
+    }
+
+    static handleErrors(error: unknown, res: Response) {
+        if (error instanceof CustomError) return res.status(error.statusCode).send({ error: error.message });
+
+        if (error instanceof Error) return res.status(500).send({ error: error.message });
     }
 }

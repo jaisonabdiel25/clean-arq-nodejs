@@ -1,11 +1,11 @@
-import { AuthRepositories, IAuthService } from "../..";
+import { IAuthRepositories, IAuthService } from "../..";
 import { LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 
 
 export class AuthServiceImpl implements IAuthService{
 
     constructor(
-        private readonly _authRepositories: AuthRepositories,
+        private readonly _authRepositories: IAuthRepositories,
     ) {
 
     }

@@ -1,8 +1,6 @@
 import { Request, Response } from "express"
 import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 import { jwtAdapter } from "../../config";
-import { UserDB } from "../../data/mongoose";
-import { AddRoleDto } from "../../domain/dtos/auth/addRole.dto";
 import { IAuthService } from "../../infrastructure";
 
 
@@ -54,11 +52,5 @@ export class AuthController {
         } catch (error) {
             this.handleErrors(error, res)
         }
-    }
-
-    getUsers = async (req: Request, res: Response) => {
-        const userDB = await UserDB.find()
-
-        res.json({ user: userDB, token: req.body.token })
     }
 }

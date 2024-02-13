@@ -2,10 +2,7 @@ import { Router } from "express";
 import { AuthRoutes } from "./auth/routes";
 import { MailRoutes } from "./mail/routes";
 import { RolesRoutes } from "./role/routes";
-
-
-
-
+import { AccountRoutes } from "./account/routes";
 
 export class AppRoutes {
 
@@ -16,6 +13,7 @@ export class AppRoutes {
         router.use('/api/auth', AuthRoutes.routes)
         router.use('/api/mail', MailRoutes.routes)
         router.use('/api/role', RolesRoutes.routes)
+        router.use('/api/account', AccountRoutes.routes)
 
         return router;
     }

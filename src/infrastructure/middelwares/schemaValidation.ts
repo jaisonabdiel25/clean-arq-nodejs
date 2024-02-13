@@ -9,7 +9,7 @@ export const schemaValidations =
             next();
         } catch (error) {
             if (error instanceof ZodError) {
-                res.status(412).json(error.errors.map(issues => issues.message))
+                return res.status(412).json(error.errors.map(({path, message}) => ({ key: path[0], message: message })));
             }
             throw CustomError.internal();
         }
