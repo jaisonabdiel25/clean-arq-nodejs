@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { envs } from './envs';
+import { IncomingHttpHeaders } from 'http';
 
 
 const JWT_SEED = envs.JWT_SECRET;
@@ -19,6 +20,19 @@ export class jwtAdapter {
     static async verifyToken<T>(token: string): Promise<T | null> {
         return new Promise((resolve) => {
             jwt.verify(token, JWT_SEED, (err, decoded) => {
+                if (err) return resolve(null);
+                resolve(decoded as T);
+            });
+        })
+    }
+
+    static async decodeToken<T>(headers: IncomingHttpHeaders): Promise<T | null> {
+
+        const { authorization } = headers;
+        const token = authorization!.split(' ')[1];
+
+        return new Promise((resolve) => {
+            jwt.verify(token!, JWT_SEED, (err, decoded) => {
                 if (err) return resolve(null);
                 resolve(decoded as T);
             });

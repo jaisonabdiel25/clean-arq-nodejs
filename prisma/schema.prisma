@@ -21,6 +21,7 @@ model User {
   roles    UserRole[]
   active   Boolean  @default(true)
   accounts Account[]
+  createBy String? @db.Uuid
 }
 
 model Role {
@@ -48,4 +49,5 @@ model Account {
   user     User     @relation(fields: [userId], references: [id])
   updateAt DateTime @updatedAt
   active   Boolean  @default(true)
+  createBy String? @db.Uuid
 }

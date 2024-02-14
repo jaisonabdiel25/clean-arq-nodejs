@@ -1,35 +1,42 @@
-import { BcryptAdapter } from "../../../config";
+import { BcryptAdapter, jwtAdapter } from "../../../config";
 import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../../domain";
 import { UserMapper } from "../../mappers/User.mapper";
 import { prisma } from "../../../data/postgress";
 import { IAuthRepositories } from '../../../infrastructure'
+import { IncomingHttpHeaders } from "http";
 
 
 export class AuthRepositoriesImpl implements IAuthRepositories {
-    async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
+    async register(registerUserDto: RegisterUserDto, headers: IncomingHttpHeaders): Promise<UserEntity> {
 
         const { name, email, password, img, phone } = registerUserDto;
         try {
 
             //validate email
             const existPostgres = await prisma.user.findMany({ where: { email } })
-
+            
             if (existPostgres.length > 0) throw CustomError.prevalidation('email already exists');
-
+            
             const userRole = await prisma.role.findFirst({ where: { name: 'MODERATOR' } });
-
+            
             if (!userRole) {
                 throw CustomError.internal('El rol MODERATOR no existe');
             }
+            
+            //hash password
+            const passwordhash = BcryptAdapter.hash(password);
+             
+            const payload = await jwtAdapter.decodeToken<{id: string}>(headers);
 
             //save user
             const user = await prisma.user.create({
                 data: {
                     name: name,
                     email: email,
-                    password: password,
+                    password: passwordhash,
                     img: img,
                     phone: phone,
+                    createBy: payload?.id,
                     roles: {
                         create: {
                             roleId: userRole.id

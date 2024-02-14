@@ -11,11 +11,11 @@ export class RegisterUserDto {
         public password: string,
         public status: boolean,
         public phone?: string,
-        public img?: string,
+        public img?: string
     ) { }
 
     static RegisterUser(object: { [key: string]: any }): [string[], RegisterUserDto?] {
-        const { name, email, password, role, img, phone } = object
+        const { name, email, password, img, phone } = object
         try {
             authSchema.parse({ name, email, password, img, phone });
             return [

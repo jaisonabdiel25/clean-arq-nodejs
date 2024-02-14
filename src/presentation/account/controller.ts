@@ -11,7 +11,7 @@ export class AccountController {
     registerAccount = async (req: Request<unknown, unknown, RegisterAccountDto>, res: Response) => {
 
         try {
-            const result = await this._serviceAccount.registerAccount(req.body);
+            const result = await this._serviceAccount.registerAccount(req.body, req.headers);
             res.status(200).json(result);
         } catch (error) {
             CustomError.handleErrors(error, res);

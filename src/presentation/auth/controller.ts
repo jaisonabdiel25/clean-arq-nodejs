@@ -24,7 +24,7 @@ export class AuthController {
 
             if (error.length > 0) return res.status(412).send({ error });
 
-            const result = await this._authServives.register(registerUserDto!)
+            const result = await this._authServives.register(registerUserDto!, req.headers)
 
             res.json({ result, token: await jwtAdapter.generateToken({ id: result.id }) })
         } catch (error) {

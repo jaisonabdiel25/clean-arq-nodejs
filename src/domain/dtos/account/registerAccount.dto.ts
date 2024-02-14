@@ -7,7 +7,7 @@ export class RegisterAccountDto {
         public balance: number,
         public name?: string,
         public description?: string,
-        public active?: boolean
+        public active?: boolean,
     ) { }
 
     static registerAccount(object: { [key: string]: any }): [string[], RegisterAccountDto?] {

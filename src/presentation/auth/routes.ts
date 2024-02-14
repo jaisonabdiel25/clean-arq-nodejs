@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthController } from "./controller";
-import { AuthRepositoriesImpl, AuthServiceImpl } from "../../infrastructure";
+import { AuthRepositoriesImpl, AuthServiceImpl, TokenMiddelware } from "../../infrastructure";
 
 export class AuthRoutes {
 
@@ -14,7 +14,7 @@ export class AuthRoutes {
 
         // definir las rutas
         router.post('/login', controller.loginUser);
-        router.post('/register', controller.registerUser);
+        router.post('/register', [TokenMiddelware.verifyToken], controller.registerUser);
         router.post('/token', controller.generateToken);
 
         return router;
